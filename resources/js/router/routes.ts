@@ -3,7 +3,6 @@ import type {Component} from 'vue'
 
 import Home from '@/components/Home.vue'
 import PasswordReset from '@/components/auth/PasswordReset.vue'
-import SecuritySettings from '@/components/settings/SecuritySettings.vue'
 import Settings from '@/components/settings/Settings.vue'
 import NotFound from '@/components/NotFound.vue'
 import EmailVerification from '@/components/auth/EmailVerification.vue'
@@ -48,22 +47,10 @@ const routes: RouteRecordRaw[] = [
         path: '/settings',
         name: 'settings',
         component: Settings,
-        redirect: { name: 'settings.security' },
         meta: {
             title: 'Настройки',
             requiresAuth: true,
         },
-        children:
-        [
-            {
-                path: 'security',
-                name: 'settings.security',
-                component: SecuritySettings,
-                meta: {
-                    title: 'Настройки безопасности',
-                }
-            }
-        ]
     },
     {
         path: '/:pathMatch(.*)*',
