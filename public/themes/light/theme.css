@@ -1,0 +1,8 @@
+@import "aura-light-indigo.css";
+
+/* Custom overrides of the imported PrimeVue theme */
+
+:root {
+    --surface-ground: #f0f0f0;
+    --surface-border: #d3d7db;
+}

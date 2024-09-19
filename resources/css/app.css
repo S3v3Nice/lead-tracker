@@ -1,0 +1,15 @@
+@layer tailwind-base, tailwind-components, lead-tracker, tailwind-utilies;
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+@import "general.css";
+
+@layer tailwind-base {
+    @tailwind base;
+}
+
+@layer tailwind-components {
+    @tailwind components;
+}
+
+@layer tailwind-utilities {
+    @tailwind utilities;
+}
