@@ -46,6 +46,10 @@ class Lead extends Model
         'appeal',
     ];
 
+    protected $appends = [
+        'status',
+    ];
+
     public function statuses(): HasMany
     {
         return $this->hasMany(LeadStatus::class, 'lead_id');
