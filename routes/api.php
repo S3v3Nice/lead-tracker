@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,10 +23,17 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
 Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
 
+Route::post('/leads', [LeadController::class, 'create']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/settings/profile', [SettingsController::class, 'changeProfileSettings']);
     Route::put('/settings/security/username', [SettingsController::class, 'changeUsername']);
     Route::put('/settings/security/email', [SettingsController::class, 'changeEmail']);
     Route::put('/settings/security/password', [SettingsController::class, 'changePassword']);
     Route::post('/settings/security/email-verification', [SettingsController::class, 'sendEmailVerificationLink'])->middleware(['throttle:1,1']);
+
+    Route::get('/leads', [LeadController::class, 'get']);
+    Route::patch('/leads/{id}', [LeadController::class, 'update']);
+    Route::put('/leads/{id}/status', [LeadController::class, 'updateStatus']);
+    Route::delete('/leads/{id}', [LeadController::class, 'delete']);
 });
