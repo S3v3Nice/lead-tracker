@@ -18,6 +18,7 @@ const toastHelper = new ToastHelper(useToast())
 const lead = toRef(props.lead)
 const isProcessing = ref(false)
 const errors = ref([])
+const isEdited = ref(false)
 
 function submit() {
     isProcessing.value = true
@@ -54,6 +55,7 @@ function submit() {
                 autocomplete="given-name"
                 :class="{ 'p-invalid': errors['first_name'] }"
                 class="w-full"
+                @update:model-value="isEdited = true"
             />
             <small class="p-error" id="first-name-error">{{ errors['first_name']?.[0] || '&nbsp;' }}</small>
         </div>
@@ -67,6 +69,7 @@ function submit() {
                 autocomplete="family-name"
                 :class="{ 'p-invalid': errors['last_name'] }"
                 class="w-full"
+                @update:model-value="isEdited = true"
             />
             <small class="p-error" id="last-name-error">{{ errors['last_name']?.[0] || '&nbsp;' }}</small>
         </div>
@@ -81,6 +84,7 @@ function submit() {
                 autocomplete="off"
                 :class="{ 'p-invalid': errors['phone'] }"
                 class="w-full"
+                @update:model-value="isEdited = true"
             />
             <small class="p-error" id="phone-error">{{ errors['phone']?.[0] || '&nbsp;' }}</small>
         </div>
@@ -94,6 +98,7 @@ function submit() {
                 autocomplete="email"
                 :class="{ 'p-invalid': errors['email'] }"
                 class="w-full"
+                @update:model-value="isEdited = true"
             />
             <small class="p-error" id="email-error">{{ errors['email']?.[0] || '&nbsp;' }}</small>
         </div>
@@ -107,13 +112,14 @@ function submit() {
                 :class="{ 'p-invalid': errors['appeal'] }"
                 aria-describedby="appeal-error"
                 class="w-full"
+                @update:model-value="isEdited = true"
             />
             <small class="p-error" id="appeal-error">{{ errors['appeal']?.[0] || '&nbsp;' }}</small>
         </div>
 
         <div class="flex justify-end gap-2">
             <Button label="Отмена" severity="secondary" @click="$emit('cancel')"></Button>
-            <Button label="Сохранить" :loading="isProcessing" type="submit"></Button>
+            <Button label="Сохранить" :loading="isProcessing" :disabled="!isEdited" type="submit"></Button>
         </div>
     </form>
 </template>
