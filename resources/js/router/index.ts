@@ -4,7 +4,6 @@ import routes from '@/router/routes'
 import {useAuthStore} from '@/stores/auth'
 import {changeTitle} from '@/helpers'
 import AuthRequired from '@/components/auth/AuthRequired.vue'
-import NoPermission from '@/components/NoPermission.vue'
 
 let hashObserver: ResizeObserver | undefined = undefined
 let hashObserverDisconnectTimeout: NodeJS.Timeout | undefined = undefined
@@ -99,22 +98,6 @@ router.beforeEach((to, _from, next) => {
             !authStore.isAuthenticated
         ) {
             displayComponent(AuthRequired)
-            return
-        }
-
-        if (
-            to.matched.some(record => record.meta.requiresModerator) &&
-            !authStore.isModerator
-        ) {
-            displayComponent(NoPermission)
-            return
-        }
-
-        if (
-            to.matched.some(record => record.meta.requiresAdmin) &&
-            !authStore.isAdmin
-        ) {
-            displayComponent(NoPermission)
             return
         }
 
