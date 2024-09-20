@@ -17,3 +17,5 @@ echo "Создаём символическую ссылку с public/storage �
 docker compose run --rm --no-deps app php artisan storage:link
 
 echo "Готово! Сконфигурируйте пароли mysql в .env (DB_ROOT_PASSWORD, DB_PASSWORD) и запустите setup-db.sh"
+
+read
