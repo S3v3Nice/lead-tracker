@@ -8,6 +8,7 @@ use App\Models\LeadStatus;
 use App\Rules\ColumnExistsRule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -42,14 +43,26 @@ class LeadController extends Controller
 
         $query = Lead::orderBy($sortField, $sortDirection);
 
+        $statusCounts = LeadStatus::select(['type', DB::raw('COUNT(*) as count')])
+            ->groupBy('type')
+            ->get()
+            ->mapWithKeys(function (LeadStatus $leadStatus) {
+                return [$leadStatus->type->value => $leadStatus->count];
+            });
+        $statusCounts = array_merge([
+            LeadStatusType::New->value => 0,
+            LeadStatusType::Pending->value => 0,
+            LeadStatusType::Done->value => 0,
+        ], $statusCounts->toArray());
+
         if ($request->has('per_page') || $request->has('page')) {
             $perPage = $request->integer('per_page', 10);
             $leads = $query->paginate($perPage);
 
             return $this->successJsonResponse([
                 'records' => $leads->items(),
+                'status_counts' => $statusCounts,
                 'pagination' => [
-                    'total_records' => $leads->total(),
                     'current_page' => $leads->currentPage(),
                     'total_pages' => $leads->lastPage(),
                 ],
@@ -58,6 +71,7 @@ class LeadController extends Controller
 
         return $this->successJsonResponse([
             'records' => $query->get(),
+            'status_counts' => $statusCounts,
         ]);
     }
 
@@ -124,9 +138,8 @@ class LeadController extends Controller
             return $this->errorJsonResponse('', $validator->errors());
         }
 
-        $leadStatus = LeadStatus::make();
+        $leadStatus = $lead->status;
         $leadStatus->type = $request->get('status');
-        $leadStatus->lead()->associate($lead);
         $leadStatus->save();
 
         return $this->successJsonResponse();

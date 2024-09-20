@@ -7,7 +7,7 @@ export interface User {
     updated_at?: string
 }
 
-enum LeadStatusType {
+export enum LeadStatusType {
     NEW = 'NEW',
     PENDING = 'PENDING',
     DONE = 'DONE',
@@ -20,7 +20,14 @@ export interface Lead {
     phone?: string
     email?: string
     appeal?: string
-    status?: LeadStatusType
+    status?: LeadStatus
     created_at?: string
     updated_at?: string
+}
+
+export interface LeadStatus {
+    id: bigint
+    type: LeadStatusType
+    created_at: string
+    updated_at: string
 }

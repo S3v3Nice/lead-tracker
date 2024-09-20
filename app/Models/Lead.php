@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Enums\LeadStatusType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\Lead
@@ -18,9 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $appeal
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\LeadStatus $status
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\LeadStatus> $statuses
- * @property-read int|null $statuses_count
+ * @property-read \App\Models\LeadStatus|null $status
  * @method static \Illuminate\Database\Eloquent\Builder|Lead newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Lead newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Lead query()
@@ -46,20 +43,12 @@ class Lead extends Model
         'appeal',
     ];
 
-    protected $appends = [
+    protected $with = [
         'status',
     ];
 
-    public function statuses(): HasMany
+    public function status(): HasOne
     {
-        return $this->hasMany(LeadStatus::class, 'lead_id');
-    }
-
-    public function getStatusAttribute(): LeadStatusType
-    {
-        /** @var LeadStatus|null $status */
-        $status = $this->statuses()->latest()->first();
-
-        return $status?->type ?? LeadStatusType::New;
+        return $this->hasOne(LeadStatus::class, 'lead_id');
     }
 }
