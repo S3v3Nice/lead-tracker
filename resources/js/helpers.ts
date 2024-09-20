@@ -22,7 +22,7 @@ export function getErrorMessageByCode(code: number) {
         case 429:
             return 'Слишком много запросов. Повторите позже.'
         default:
-            return ''
+            return 'Произошла внутренняя ошибка'
     }
 }
 

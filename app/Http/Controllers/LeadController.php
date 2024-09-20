@@ -68,14 +68,14 @@ class LeadController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'regex:' . self::RUSSIAN_PHONE_REGEX],
             'email' => ['required', 'email', 'max:255'],
-            'appeal' => ['required', 'string', 'max:255'],
+            'appeal' => ['required', 'string', 'max:255', 'nullable'],
         ]);
 
         if ($validator->fails()) {
             return $this->errorJsonResponse('', $validator->errors());
         }
 
-        $lead = Lead::create($request->only(['first_name', 'last_name', 'phone', 'email']));
+        $lead = Lead::create($request->only(['first_name', 'last_name', 'phone', 'email', 'appeal']));
 
         $leadStatus = LeadStatus::make();
         $leadStatus->type = LeadStatusType::New;
